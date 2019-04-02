@@ -6,7 +6,7 @@ def get_greenhouse_positions(gh_link, gh_boards):
     all_positions = []
 
     for job_board in gh_boards:
-        page = requests.get(gh_link + job_board["Link"])
+        page = requests.get(gh_link + job_board["Company"].replace(" ", "").lower()) if "Link" not in job_board else requests.get(gh_link + job_board["Link"])
         sections = BeautifulSoup(page.text, 'html.parser').find_all("section", {"class": "level-0"})
 
         for section in sections:
@@ -25,7 +25,7 @@ def get_lever_positions(l_link, l_boards):
     all_positions = []
 
     for job_board in l_boards:
-        page = requests.get(l_link + job_board["Link"])
+        page = requests.get(l_link + job_board["Company"].replace(" ", "").lower()) if "Link" not in job_board else requests.get(l_link + job_board["Link"])
         positions = BeautifulSoup(page.text, 'html.parser').find_all("div", {"class": "posting"})
 
         for position in positions:
@@ -65,7 +65,7 @@ def filter_positions(positions):
 
     for position in positions:
         title = remove_punctuation(position["Title"].lower())
-        if ("intern" in title.split() or "co-op" in title or "univ" in title) and ("summer 2019" not in title) and not [False for no_loc in no_locations if no_loc.lower() in position["Location"].lower()]:
+        if ("intern" in title.split() or "co-op" in title or "univ" in title) and ("summer 2019" not in title) and ("mba" not in title) and not [False for no_loc in no_locations if no_loc.lower() in position["Location"].lower()]:
             new_positions.append(position)
 
     return new_positions
@@ -73,66 +73,91 @@ def filter_positions(positions):
 
 def main():
     gh_positions = get_greenhouse_positions("https://boards.greenhouse.io/", [
-        {"Company": "Amplitude", "Link": "amplitude"},
-        {"Company": "Asana", "Link": "asana"},
+        {"Company": "Amplitude"},
+        {"Company": "Asana"},
         {"Company": "Box", "Link": "boxinc"},
-        {"Company": "DoorDash", "Link": "doordash"},
+        {"Company": "DoorDash"},
         {"Company": "Foursquare", "Link": "foursquare26"},
-        {"Company": "Flexport", "Link": "flexport"},
-        {"Company": "Flyhomes", "Link": "flyhomes"},
-        {"Company": "Instacart", "Link": "instacart"},
-        {"Company": "Intercom", "Link": "intercom"},
-        {"Company": "MailChimp", "Link": "mailchimp"},
-        {"Company": "Managed by Q", "Link": "managedbyq"},
-        {"Company": "Mozilla", "Link": "mozilla"},
-        {"Company": "Patreon", "Link": "patreon"},
-        {"Company": "Redbooth", "Link": "redbooth"},
-        {"Company": "Robinhood", "Link": "robinhood"},
-        {"Company": "Samsara", "Link": "samsara"},
-        {"Company": "SeatGeek", "Link": "seatgeek"},
-        {"Company": "Sonder", "Link": "sonder"},
-        {"Company": "Splash", "Link": "splash"},
-        {"Company": "Thumbtack", "Link": "thumbtack"},
-        {"Company": "Twilio", "Link": "twilio"},
+        {"Company": "Flexport"},
+        {"Company": "Flyhomes"},
+        {"Company": "Instacart"},
+        {"Company": "Intercom"},
+        {"Company": "MailChimp"},
+        {"Company": "Managed by Q"},
+        {"Company": "Mozilla"},
+        {"Company": "Patreon"},
+        {"Company": "Redbooth"},
+        {"Company": "Robinhood"},
+        {"Company": "Samsara"},
+        {"Company": "SeatGeek"},
+        {"Company": "Sonder"},
+        {"Company": "Splash"},
+        {"Company": "Thumbtack"},
+        {"Company": "Twilio"},
         {"Company": "Vimeo", "Link": "vimeointernships"}
     ])
     l_positions = get_lever_positions("https://jobs.lever.co/", [
-        {"Company": "Affinity", "Link": "affinity"},
-        {"Company": "Affirm", "Link": "affirm"},
-        {"Company": "Algolia", "Link": "algolia"},
-        {"Company": "Atlassian", "Link": "atlassian"},
-        {"Company": "Atrium", "Link": "atrium"},
-        {"Company": "Bird", "Link": "bird"},
-        {"Company": "Bolt", "Link": "bolt"},
-        {"Company": "Brex", "Link": "brex"},
-        {"Company": "BuildingConnected", "Link": "buildingconnected"},
-        {"Company": "Carta", "Link": "carta"},
-        {"Company": "Comma", "Link": "comma"},
-        {"Company": "Ditto", "Link": "ditto"},
-        {"Company": "Envoy", "Link": "envoy"},
+        {"Company": "Affinity"},
+        {"Company": "Affirm"},
+        {"Company": "Algolia"},
+        {"Company": "Atlassian"},
+        {"Company": "Atrium"},
+        {"Company": "Bird"},
+        {"Company": "Bolt"},
+        {"Company": "Brex"},
+        {"Company": "BuildingConnected"},
+        {"Company": "Carta"},
+        {"Company": "Comma"},
+        {"Company": "Ditto"},
+        {"Company": "Envoy"},
         {"Company": "Even", "Link": "teameven"},
-        {"Company": "Figma", "Link": "figma"},
-        {"Company": "Houseparty", "Link": "houseparty"},
-        {"Company": "Houzz", "Link": "houzz"},
-        {"Company": "IFTTT", "Link": "ifttt"},
-        {"Company": "Karat", "Link": "karat"},
+        {"Company": "Figma"},
+        {"Company": "Houseparty"},
+        {"Company": "Houzz"},
+        {"Company": "IFTTT"},
+        {"Company": "Karat"},
         {"Company": "Lattice", "Link": "latticehq"},
-        {"Company": "Lever", "Link": "lever"},
-        {"Company": "Medium", "Link": "medium"},
-        {"Company": "Opendoor", "Link": "opendoor"},
-        {"Company": "Palantir", "Link": "palantir"},
-        {"Company": "Plaid", "Link": "plaid"},
-        {"Company": "Quantcast", "Link": "quantcast"},
+        {"Company": "Lever"},
+        {"Company": "Medium"},
+        {"Company": "Opendoor"},
+        {"Company": "Palantir"},
+        {"Company": "Plaid"},
+        {"Company": "Quantcast"},
         {"Company": "Spoke", "Link": "askspoke"},
-        {"Company": "Twitch", "Link": "twitch"},
-        {"Company": "Udemy", "Link": "udemy"},
-        {"Company": "Wealthfront", "Link": "wealthfront"},
-        {"Company": "Y Combinator", "Link": "ycombinator"},
-        {"Company": "Yelp", "Link": "yelp"},
-        {"Company": "Zendesk", "Link": "zendesk"}
+        {"Company": "Twitch"},
+        {"Company": "Udemy"},
+        {"Company": "Wealthfront"},
+        {"Company": "Y Combinator"},
+        {"Company": "Yelp"},
+        {"Company": "Zendesk"}
     ])
 
-    all_positions = filter_positions(gh_positions + l_positions)
+    blacklisted_positions = [
+        "Graphic Design Intern",
+        "Recruiting Intern",
+        "University Recruit",
+        "People Team Intern",
+        "Marketing Operations Intern",
+        "Government Affairs Intern",
+        "Sales Intern -",
+        "Legal Intern",
+        "Community Intern -",
+        "Billing Operations Intern",
+        "Social Media Intern",
+        "Business Operations Intern",
+        "Financial Planning and Analysis Intern",
+        "Twilio Intern Program- Sales Intern",
+        "SEO Intern",
+        "Regional Marketing Campaigns Intern",
+        "2019 Management",
+        "2019 Security",
+        "2019 University Business",
+        "2019 University Security",
+        "2019 University Site Reliability"
+    ]
+
+    all_positions = sorted(filter_positions(gh_positions + l_positions), key=lambda k: k['Company'])
+    all_positions = [x for x in all_positions if x["Title"] not in blacklisted_positions and not any(x["Title"].startswith(bl_p) for bl_p in blacklisted_positions)]
 
     f = open("intern_positions.csv", "w")
     writer = csv.DictWriter(
