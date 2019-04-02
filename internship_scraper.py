@@ -86,6 +86,7 @@ def main():
         {"Company": "Managed by Q"},
         {"Company": "Mozilla"},
         {"Company": "Patreon"},
+        {"Company": "Postmates"},
         {"Company": "Redbooth"},
         {"Company": "Robinhood"},
         {"Company": "Samsara"},
@@ -94,6 +95,7 @@ def main():
         {"Company": "Splash"},
         {"Company": "Thumbtack"},
         {"Company": "Twilio"},
+        {"Company": "Uptake"},
         {"Company": "Vimeo", "Link": "vimeointernships"}
     ])
     l_positions = get_lever_positions("https://jobs.lever.co/", [
