@@ -65,7 +65,7 @@ def filter_positions(positions):
 
     for position in positions:
         title = remove_punctuation(position["Title"].lower())
-        if ("intern" in title.split() or "co-op" in title or "univ" in title) and ("summer 2019" not in title) and ("mba" not in title) and not [False for no_loc in no_locations if no_loc.lower() in position["Location"].lower()]:
+        if ("intern" in title.split() or "coop" in title or "univ" in title) and ("summer 2019" not in title) and ("mba" not in title) and not [False for no_loc in no_locations if no_loc.lower() in position["Location"].lower()]:
             new_positions.append(position)
 
     return new_positions
