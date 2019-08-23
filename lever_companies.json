@@ -1,0 +1,47 @@
+[
+        {
+		"Company": "Affinity"
+	},
+        {
+		"Company": "Bolt"
+	},
+        {
+		"Company": "Even",
+		"Link": "teameven"
+	},
+        {
+		"Company": "Figma"
+	},
+        {
+		"Company": "Houzz"
+	},
+        {
+		"Company": "Lattice",
+		"Link": "latticehq"
+	},
+        {
+		"Company": "Opendoor"
+	},
+        {
+		"Company": "Palantir"
+	},
+        {
+		"Company": "Plaid"
+	},
+        {
+		"Company": "Quantcast"
+	},
+        {
+		"Company": "Spoke",
+		"Link": "askspoke"
+	},
+        {
+		"Company": "Textio"
+	},
+        {
+		"Company": "Udemy"
+	},
+        {
+		"Company": "Wealthfront"
+	}
+]
