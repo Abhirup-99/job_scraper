@@ -23,17 +23,17 @@ def get_positions_on_greenhouse(job_boards):
 
         if len(sections) == 0:
             print("ERROR:", job_board["Company"], "could not be scraped!")
+        else:
+            for section in sections:
+                for position in section.find_all("div", {"class": "opening"}):
+                    all_positions.append({
+                        "Company": job_board["Company"],
+                        "Title": position.find("a").getText().strip(),
+                        "Link": ("" if position.find("a")['href'].startswith("https") else root_link[:-1]) + position.find("a")['href'],
+                        "Location": position.find("span", {"class": "location"}).getText().strip()
+                    })
 
-        for section in sections:
-            for position in section.find_all("div", {"class": "opening"}):
-                all_positions.append({
-                    "Company": job_board["Company"],
-                    "Title": position.find("a").getText().strip(),
-                    "Link": ("" if position.find("a")['href'].startswith("https") else root_link[:-1]) + position.find("a")['href'],
-                    "Location": position.find("span", {"class": "location"}).getText().strip()
-                })
-
-        print("Done")
+            print("Done")
 
     return all_positions
 
@@ -52,25 +52,25 @@ def get_positions_on_lever(job_boards):
 
         if len(positions) == 0:
             print("ERROR:", job_board["Company"], "could not be scraped!")
+        else:
+            for position in positions:
+                if position.find("span", {"class": "sort-by-commitment"}):
+                    all_positions.append({
+                        "Company": job_board["Company"],
+                        "Title": position.find("h5").getText() + " (" + position.find("span", {
+                            "class": "sort-by-commitment"}).getText() + ")",
+                        "Link": position.find("a", {"class": "posting-title"})['href'],
+                        "Location": position.find("span", {"class": "sort-by-location"}).getText()
+                    })
+                else:
+                    all_positions.append({
+                        "Company": job_board["Company"],
+                        "Title": position.find("h5").getText(),
+                        "Link": position.find("a", {"class": "posting-title"})['href'],
+                        "Location": position.find("span", {"class": "sort-by-location"}).getText()
+                    })
 
-        for position in positions:
-            if position.find("span", {"class": "sort-by-commitment"}):
-                all_positions.append({
-                    "Company": job_board["Company"],
-                    "Title": position.find("h5").getText() + " (" + position.find("span", {
-                        "class": "sort-by-commitment"}).getText() + ")",
-                    "Link": position.find("a", {"class": "posting-title"})['href'],
-                    "Location": position.find("span", {"class": "sort-by-location"}).getText()
-                })
-            else:
-                all_positions.append({
-                    "Company": job_board["Company"],
-                    "Title": position.find("h5").getText(),
-                    "Link": position.find("a", {"class": "posting-title"})['href'],
-                    "Location": position.find("span", {"class": "sort-by-location"}).getText()
-                })
-
-        print("Done")
+            print("Done")
 
     return all_positions
 
@@ -95,15 +95,15 @@ def extract_key(elem, key):
 
 # Helper function for get_positions_on_workday
 # Scrapes the JSON of a given URL
-def get_request_to_dict(link):
+def get_request_to_dict(link, company_name):
     req = Request(link)
     req.add_header("Accept", "application/json,application/xml")
 
     try:
         raw_page = urlopen(req).read().decode()
         page_dict = json.loads(raw_page)
-    except HTTPError as err:
-        print("HTTPError", err.code)
+    except:
+        print("ERROR:", company_name, "could not be scraped!")
         page_dict = {}
 
     return page_dict
@@ -117,33 +117,33 @@ def get_positions_on_workday(job_boards):
     for job_board in job_boards:
         print("\tScraping for " + job_board["Company"] + "...", end=" ", flush=True)
 
-        postings_page_dict = get_request_to_dict(job_board["Link"])
+        postings_page_dict = get_request_to_dict(job_board["Link"], job_board["Company"])
+        if len(postings_page_dict) > 0:
+            base_url = job_board["Link"][:job_board["Link"].index('.com') + 4]
+            pagination_end_point = base_url
+            for end_point in extract_key(postings_page_dict, 'endPoints'):
+                if end_point['type'] == "Pagination":
+                    pagination_end_point += end_point['uri'] + '/'
+                    break
 
-        base_url = job_board["Link"][:job_board["Link"].index('.com') + 4]
-        pagination_end_point = base_url
-        for end_point in extract_key(postings_page_dict, 'endPoints'):
-            if end_point['type'] == "Pagination":
-                pagination_end_point += end_point['uri'] + '/'
-                break
+            while True:
+                postings_list = extract_key(postings_page_dict, 'listItems')
+                if postings_list is None:
+                    break
 
-        while True:
-            postings_list = extract_key(postings_page_dict, 'listItems')
-            if postings_list is None:
-                break
+                paginated_urls = []
+                for position in postings_list:
+                    paginated_urls.append({
+                        "Company": job_board["Company"],
+                        "Title": position["title"]["instances"][0]["text"],
+                        "Link": base_url + position["title"]["commandLink"],
+                        "Location": position["subtitles"][0]["instances"][0]["text"] if ", More..." not in position["subtitles"][0]["instances"][0]["text"] else position["subtitles"][0]["instances"][0]["text"][:position["subtitles"][0]["instances"][0]["text"].index(", More...")]
+                    })
 
-            paginated_urls = []
-            for position in postings_list:
-                paginated_urls.append({
-                    "Company": job_board["Company"],
-                    "Title": position["title"]["instances"][0]["text"],
-                    "Link": base_url + position["title"]["commandLink"],
-                    "Location": position["subtitles"][0]["instances"][0]["text"] if ", More..." not in position["subtitles"][0]["instances"][0]["text"] else position["subtitles"][0]["instances"][0]["text"][:position["subtitles"][0]["instances"][0]["text"].index(", More...")]
-                })
+                all_positions += paginated_urls
+                postings_page_dict = get_request_to_dict(pagination_end_point + str(len(all_positions)), job_board["Company"])
 
-            all_positions += paginated_urls
-            postings_page_dict = get_request_to_dict(pagination_end_point + str(len(all_positions)))
-
-        print("Done")
+            print("Done")
 
     return all_positions
 
@@ -153,12 +153,12 @@ def get_positions_on_workday(job_boards):
 def get_positions_using_selenium(job_boards):
     all_positions = []
 
+    options = webdriver.ChromeOptions()
+    options.add_argument("--headless")
+    options.add_argument("window-size=2880,1800")
+
     for job_board in job_boards:
         print("\tScraping for " + job_board.get("Company Name") + "...", end=" ", flush=True)
-
-        options = webdriver.ChromeOptions()
-        options.add_argument("--headless")
-        options.add_argument("window-size=2880,1800")
 
         browser = webdriver.Chrome(executable_path='./chromedriver', options=options)
         browser.get(job_board.get("Careers Website"))
@@ -167,22 +167,23 @@ def get_positions_using_selenium(job_boards):
 
         try:
             WebDriverWait(browser, 20).until(EC.visibility_of_element_located((By.CSS_SELECTOR, job_board.get("Job Item"))))
-        except TimeoutException:
-            print("Failure to open " + job_board.get("Company Name") + " website")
-            browser.quit()
 
-        if job_board.get("Prereq Clicks") is not None:
-            browser.find_element_by_xpath(job_board.get("Prereq Clicks")).click()
+            if job_board.get("Prereq Clicks") is not None:
+                browser.find_element_by_xpath(job_board.get("Prereq Clicks")).click()
 
-        for job in browser.find_elements_by_css_selector(job_board.get("Job Item")):
-            all_positions.append({
-                "Company": job_board.get("Company Name"),
-                "Title": job.find_element_by_css_selector(job_board.get("Job Item Title")).text,
-                "Link": job.get_attribute("href") if job_board.get("Job Item Link") is None else job.find_element_by_css_selector(job_board.get("Job Item Link")).get_attribute("href"),
-                "Location": "" if job_board.get("Job Item Location") is None else ' '.join([location.text for location in job.find_elements_by_css_selector(job_board.get("Job Item Location"))])
-            })
+            for job in browser.find_elements_by_css_selector(job_board.get("Job Item")):
+                all_positions.append({
+                    "Company": job_board.get("Company Name"),
+                    "Title": job.find_element_by_css_selector(job_board.get("Job Item Title")).text,
+                    "Link": job.get_attribute("href") if job_board.get("Job Item Link") is None else job.find_element_by_css_selector(job_board.get("Job Item Link")).get_attribute("href"),
+                    "Location": "" if job_board.get("Job Item Location") is None else ' '.join([location.text for location in job.find_elements_by_css_selector(job_board.get("Job Item Location"))])
+                })
 
-        print("Done")
+            print("Done")
+        except:
+            print("ERROR:", job_board.get("Company Name"), "could not be scraped!")
+
+        browser.quit()
 
     return all_positions
 
@@ -194,7 +195,6 @@ def scrape_apple_positions(link):
     all_positions = []
 
     options = webdriver.ChromeOptions()
-    # options.add_argument("--headless")
     options.add_argument("window-size=2880,1800")
 
     browser = webdriver.Chrome(executable_path='./chromedriver', options=options)
@@ -202,25 +202,29 @@ def scrape_apple_positions(link):
 
     while True:
         try:
-            WebDriverWait(browser, 50).until(EC.visibility_of_element_located((By.CSS_SELECTOR, "#active-search-results")))
-        except TimeoutException:
-            print("Failure to open Apple website")
-            browser.quit()
+            WebDriverWait(browser, 20).until(EC.visibility_of_element_located((By.CSS_SELECTOR, "#active-search-results")))
 
-        for job in browser.find_elements_by_css_selector("table > tbody"):
-            all_positions.append({
-                "Company": "Apple",
-                "Title": job.find_element_by_css_selector("tr > td.table-col-1 > a").text,
-                "Link": job.find_element_by_css_selector("tr > td.table-col-1 > a").get_attribute("href"),
-                "Location": job.find_element_by_css_selector("tr > td.table-col-2 > span").text
-            })
+            for job in browser.find_elements_by_css_selector("table > tbody"):
+                all_positions.append({
+                    "Company": "Apple",
+                    "Title": job.find_element_by_css_selector("tr > td.table-col-1 > a").text,
+                    "Link": job.find_element_by_css_selector("tr > td.table-col-1 > a").get_attribute("href"),
+                    "Location": job.find_element_by_css_selector("tr > td.table-col-2 > span").text
+                })
 
-        if "disabled" in browser.find_element_by_css_selector("nav.pagination > ul > li.pagination__next span.next").get_attribute("class"):
+            if "disabled" in browser.find_element_by_css_selector("nav.pagination > ul > li.pagination__next span.next").get_attribute("class"):
+                break
+            else:
+                browser.find_element_by_css_selector("nav.pagination > ul > li.pagination__next").click()
+        except:
+            print("ERROR: Apple could not be scraped!")
+            all_positions = []
             break
-        else:
-            browser.find_element_by_css_selector("nav.pagination > ul > li.pagination__next").click()
 
-    print("Done")
+    if len(all_positions) > 0:
+        print("Done")
+
+    browser.quit()
     return all_positions
 
 
@@ -239,19 +243,21 @@ def scrape_coda_positions(link):
 
     try:
         WebDriverWait(browser, 20).until(EC.visibility_of_element_located((By.CSS_SELECTOR, "ul.jobs-search__results-list")))
-    except TimeoutException:
-        print("Failure to open Coda website")
-        browser.quit()
 
-    for job in browser.find_elements_by_css_selector("ul.jobs-search__results-list > li.job-result-card"):
-        all_positions.append({
-            "Company": "Coda",
-            "Title": job.find_element_by_css_selector("div.job-result-card__contents > h3.job-result-card__title").text,
-            "Link": job.find_element_by_css_selector("a.result-card__full-card-link").get_attribute("href")[:job.find_element_by_css_selector("a.result-card__full-card-link").get_attribute("href").index("?")],
-            "Location": job.find_element_by_css_selector("div.job-result-card__contents > div.job-result-card__meta > span.job-result-card__location").text
-        })
+        for job in browser.find_elements_by_css_selector("ul.jobs-search__results-list > li.job-result-card"):
+            all_positions.append({
+                "Company": "Coda",
+                "Title": job.find_element_by_css_selector("div.job-result-card__contents > h3.job-result-card__title").text,
+                "Link": job.find_element_by_css_selector("a.result-card__full-card-link").get_attribute("href")[:job.find_element_by_css_selector("a.result-card__full-card-link").get_attribute("href").index("?")],
+                "Location": job.find_element_by_css_selector("div.job-result-card__contents > div.job-result-card__meta > span.job-result-card__location").text
+            })
+    except:
+        print("ERROR: Coda could not be scraped!")
 
-    print("Done")
+    if len(all_positions) > 0:
+        print("Done")
+
+    browser.quit()
     return all_positions
 
 
@@ -274,27 +280,32 @@ def scrape_ea_positions(link):
         # wait for results to load
         try:
             WebDriverWait(browser, 20).until(EC.visibility_of_element_located((By.CSS_SELECTOR, ".search-results-view.loading-context")))
-        except TimeoutException:
-            print("Failure to open Electronic Arts website (page " + page + ")")
-            browser.quit()
 
-        # scrape all positions from the current page
-        for job in browser.find_elements_by_css_selector("div.search-results-view.loading-context tbody > tr"):
-            all_positions.append({
-                "Company": "Electronic Arts",
-                "Title": job.find_element_by_css_selector("td:nth-child(1) > a").text,
-                "Link": job.find_element_by_css_selector("td:nth-child(1) > a").get_attribute("href"),
-                "Location": job.find_element_by_css_selector("td:nth-child(4)").text
-            })
+            # scrape all positions from the current page
+            for job in browser.find_elements_by_css_selector("div.search-results-view.loading-context tbody > tr"):
+                all_positions.append({
+                    "Company": "Electronic Arts",
+                    "Title": job.find_element_by_css_selector("td:nth-child(2)").text,
+                    "Link": job.find_element_by_css_selector("td:nth-child(1) > a").get_attribute("href"),
+                    "Location": job.find_element_by_css_selector("td:nth-child(4)").text
+                })
 
-        # move to next page
-        if page == 1:
-            browser.find_element_by_css_selector("div.pagination > a:nth-child(4)").click()
-        elif page < total_page_count:
-            browser.find_element_by_css_selector("div.pagination > a:nth-child(5)").click()
-        time.sleep(1)
+            # move to next page
+            if page == 1:
+                browser.find_element_by_css_selector("div.pagination > a:nth-child(4)").click()
+            elif page < total_page_count:
+                browser.find_element_by_css_selector("div.pagination > a:nth-child(5)").click()
+            time.sleep(1)
 
-    print("Done")
+        except:
+            print("ERROR: Electronic Arts (page ", page, ") could not be scraped!", sep="")
+            all_positions = []
+            break
+
+    if len(all_positions) > 0:
+        print("Done")
+
+    browser.quit()
     return all_positions
 
 
@@ -313,29 +324,31 @@ def scrape_hulu_positions(link):
 
     try:
         WebDriverWait(browser, 20).until(EC.visibility_of_element_located((By.ID, "positions")))
-    except TimeoutException:
-        print("Failure to open Hulu website")
-        browser.quit()
 
-    browser.find_element_by_css_selector("#category_filters > div:nth-child(16)").click()
+        browser.find_element_by_css_selector("#category_filters > div:nth-child(16)").click()
 
-    prev_height = 0
-    new_height = int(browser.execute_script("return document.body.scrollHeight"))
-    while prev_height < new_height:
-        browser.execute_script("window.scrollTo(0, document.body.scrollHeight);")
-        time.sleep(1)
-        prev_height = new_height
+        prev_height = 0
         new_height = int(browser.execute_script("return document.body.scrollHeight"))
+        while prev_height < new_height:
+            browser.execute_script("window.scrollTo(0, document.body.scrollHeight);")
+            time.sleep(1)
+            prev_height = new_height
+            new_height = int(browser.execute_script("return document.body.scrollHeight"))
 
-    for job in browser.find_elements_by_css_selector("#positions > .job-listing"):
-        all_positions.append({
-            "Company": "Hulu",
-            "Title": job.find_element_by_css_selector(".job-info > h4 > a").text,
-            "Link": job.find_element_by_css_selector(".job-info > h4 > a").get_attribute("href"),
-            "Location": job.find_element_by_css_selector(".job-info > span:nth-child(6)").text
-        })
+        for job in browser.find_elements_by_css_selector("#positions > .job-listing"):
+            all_positions.append({
+                "Company": "Hulu",
+                "Title": job.find_element_by_css_selector(".job-info > h4 > a").text,
+                "Link": job.find_element_by_css_selector(".job-info > h4 > a").get_attribute("href"),
+                "Location": job.find_element_by_css_selector(".job-info > span:nth-child(6)").text
+            })
+    except:
+        print("ERROR: Hulu could not be scraped!")
 
-    print("Done")
+    if len(all_positions) > 0:
+        print("Done")
+
+    browser.quit()
     return all_positions
 
 
@@ -354,26 +367,28 @@ def scrape_linkedin_positions(link):
 
     try:
         WebDriverWait(browser, 20).until(EC.visibility_of_element_located((By.CSS_SELECTOR, "ul.jobs-search__results-list")))
-    except TimeoutException:
-        print("Failure to open LinkedIn website")
-        browser.quit()
 
-    while True:
-        try:
-            browser.find_element_by_css_selector("button.see-more-jobs").click()
-            time.sleep(0.5)
-        except:
-            break
+        while True:
+            try:
+                browser.find_element_by_css_selector("button.see-more-jobs").click()
+                time.sleep(0.5)
+            except:
+                break
 
-    for job in browser.find_elements_by_css_selector(".jobs-search__results-list > li.job-result-card"):
-        all_positions.append({
-            "Company": "LinkedIn",
-            "Title": job.find_element_by_css_selector(".result-card__contents > h3.result-card__title").text,
-            "Link": job.find_element_by_css_selector("a.result-card__full-card-link").get_attribute("href")[:job.find_element_by_css_selector("a.result-card__full-card-link").get_attribute("href").index("?")],
-            "Location": job.find_element_by_css_selector(".result-card__contents > .result-card__meta > span.job-result-card__location").text
-        })
+        for job in browser.find_elements_by_css_selector(".jobs-search__results-list > li.job-result-card"):
+            all_positions.append({
+                "Company": "LinkedIn",
+                "Title": job.find_element_by_css_selector(".result-card__contents > h3.result-card__title").text,
+                "Link": job.find_element_by_css_selector("a.result-card__full-card-link").get_attribute("href")[:job.find_element_by_css_selector("a.result-card__full-card-link").get_attribute("href").index("?")],
+                "Location": job.find_element_by_css_selector(".result-card__contents > .result-card__meta > span.job-result-card__location").text
+            })
+    except:
+        print("ERROR: LinkedIn could not be scraped!")
 
-    print("Done")
+    if len(all_positions) > 0:
+        print("Done")
+
+    browser.quit()
     return all_positions
 
 
@@ -393,21 +408,23 @@ def scrape_rockstar_positions(links):
 
         try:
             WebDriverWait(browser, 20).until(EC.visibility_of_element_located((By.CSS_SELECTOR, "#siteBody > div > div > div > div:nth-child(1) > ul > li > ul > li:nth-child(1)")))
-        except TimeoutException:
-            print("Failure to open Rockstar Games website")
-            browser.quit()
 
-        for city in browser.find_elements_by_css_selector("#siteBody > div > div > div > div > ul > li"):
-            for job in city.find_elements_by_css_selector("ul > li"):
-                all_positions.append({
-                    "Company": "Rockstar Games",
-                    "Title": job.find_element_by_css_selector("a").text,
-                    "Link": job.find_element_by_css_selector("a").get_attribute("href"),
-                    "Location": city.find_element_by_css_selector("a.city > span").text
-                })
+            for city in browser.find_elements_by_css_selector("#siteBody > div > div > div > div > ul > li"):
+                for job in city.find_elements_by_css_selector("ul > li"):
+                    all_positions.append({
+                        "Company": "Rockstar Games",
+                        "Title": job.find_element_by_css_selector("a").text,
+                        "Link": job.find_element_by_css_selector("a").get_attribute("href"),
+                        "Location": city.find_element_by_css_selector("a.city > span").text
+                    })
+        except:
+            print("ERROR: Rockstar Games could not be scraped!")
 
-    print("Done")
-    return all_positions
+        if len(all_positions) > 0:
+            print("Done")
+
+        browser.quit()
+        return all_positions
 
 
 # Scrapes all positions from Spotify's job board
@@ -425,29 +442,31 @@ def scrape_spotify_positions(link):
 
     try:
         WebDriverWait(browser, 20).until(EC.visibility_of_element_located((By.CSS_SELECTOR, "table > tbody.js-jobs-results")))
-    except TimeoutException:
-        print("Failure to open Spotify website")
-        browser.quit()
 
-    while True:
-        try:
-            if "hidden" not in browser.find_element_by_css_selector("footer").get_attribute("class"):
-                browser.execute_script("arguments[0].click();", browser.find_element_by_css_selector("footer a.btn.js-show-more-jobs"))
-                time.sleep(0.5)
-            else:
+        while True:
+            try:
+                if "hidden" not in browser.find_element_by_css_selector("footer").get_attribute("class"):
+                    browser.execute_script("arguments[0].click();", browser.find_element_by_css_selector("footer a.btn.js-show-more-jobs"))
+                    time.sleep(0.5)
+                else:
+                    break
+            except:
                 break
-        except:
-            break
 
-    for job in browser.find_elements_by_css_selector("table > tbody.js-jobs-results > tr"):
-        all_positions.append({
-            "Company": "Spotify",
-            "Title": job.find_element_by_css_selector("td.table-item-title > a > h4").text,
-            "Link": job.find_element_by_css_selector("td.table-item-title > a").get_attribute("href"),
-            "Location": job.find_element_by_css_selector("td:nth-child(3)").text
-        })
+        for job in browser.find_elements_by_css_selector("table > tbody.js-jobs-results > tr"):
+            all_positions.append({
+                "Company": "Spotify",
+                "Title": job.find_element_by_css_selector("td.table-item-title > a > h4").text,
+                "Link": job.find_element_by_css_selector("td.table-item-title > a").get_attribute("href"),
+                "Location": job.find_element_by_css_selector("td:nth-child(3)").text
+            })
+    except:
+        print("ERROR: Spotify could not be scraped!")
 
-    print("Done")
+    if len(all_positions) > 0:
+        print("Done")
+
+    browser.quit()
     return all_positions
 
 
@@ -466,61 +485,63 @@ def scrape_ubisoft_positions(link):
 
     try:
         WebDriverWait(browser, 20).until(EC.visibility_of_element_located((By.CSS_SELECTOR, "table > tbody")))
-    except TimeoutException:
-        print("Failure to open Ubisoft website")
-        browser.quit()
 
-    browser.execute_script("window.scrollTo(0, 175);")
+        browser.execute_script("window.scrollTo(0, 175);")
 
-    # open 'Choose your area of expertise' dropdown
-    browser.find_element_by_css_selector("#sr-widget-search-filters-container > div:nth-child(3) > .k-widget.k-multiselect.k-header").click()
-    # select 'Game & Level Design/Creative Direction', 'Online/Web', and 'Programming'
-    for area_option in browser.find_elements_by_css_selector("#sr-widget-department-list > div > ul > li"):
-        if area_option.text == "Game & Level Design/Creative Direction" or area_option.text == "Online/Web" or area_option.text == "Programming":
-            area_option.click()
+        # open 'Choose your area of expertise' dropdown
+        browser.find_element_by_css_selector("#sr-widget-search-filters-container > div:nth-child(3) > .k-widget.k-multiselect.k-header").click()
+        # select 'Game & Level Design/Creative Direction', 'Online/Web', and 'Programming'
+        for area_option in browser.find_elements_by_css_selector("#sr-widget-department-list > div > ul > li"):
+            if area_option.text == "Game & Level Design/Creative Direction" or area_option.text == "Online/Web" or area_option.text == "Programming":
+                area_option.click()
 
-    # open 'Select a type of contract' dropdown
-    browser.find_element_by_css_selector("#sr-widget-search-filters-container > div:nth-child(5) > .k-widget.k-multiselect.k-header").click()
-    # select 'Full-time'
-    for contract_type in browser.find_elements_by_css_selector("#sr-widget-employment-type-list > div > ul > li"):
-        if contract_type.get_attribute("textContent") == "Full-time":
-            browser.execute_script("arguments[0].click();", contract_type)
+        # open 'Select a type of contract' dropdown
+        browser.find_element_by_css_selector("#sr-widget-search-filters-container > div:nth-child(5) > .k-widget.k-multiselect.k-header").click()
+        # select 'Full-time'
+        for contract_type in browser.find_elements_by_css_selector("#sr-widget-employment-type-list > div > ul > li"):
+            if contract_type.get_attribute("textContent") == "Full-time":
+                browser.execute_script("arguments[0].click();", contract_type)
 
-    # open 'Explore opportunities by country' dropdown
-    browser.find_element_by_css_selector("#sr-widget-search-filters-container > div:nth-child(7) > .k-widget.k-multiselect.k-header").click()
-    # select 'United States'
-    for country in browser.find_elements_by_css_selector("#sr-widget-country-list > div > ul > li"):
-        if country.text == "United States":
-            country.click()
+        # open 'Explore opportunities by country' dropdown
+        browser.find_element_by_css_selector("#sr-widget-search-filters-container > div:nth-child(7) > .k-widget.k-multiselect.k-header").click()
+        # select 'United States'
+        for country in browser.find_elements_by_css_selector("#sr-widget-country-list > div > ul > li"):
+            if country.text == "United States":
+                country.click()
 
-    # click 'Search' button
-    browser.find_element_by_css_selector("#sr-widget-search").click()
-    time.sleep(0.1)
+        # click 'Search' button
+        browser.find_element_by_css_selector("#sr-widget-search").click()
+        time.sleep(0.1)
 
-    try:
-        WebDriverWait(browser, 20).until(EC.visibility_of_element_located((By.CSS_SELECTOR, "table > tbody")))
-    except TimeoutException:
-        print("Failure to open Ubisoft website")
-        browser.quit()
+        try:
+            WebDriverWait(browser, 20).until(EC.visibility_of_element_located((By.CSS_SELECTOR, "table > tbody")))
 
-    has_more_pages = True
-    while has_more_pages:
-        for job in browser.find_elements_by_css_selector("table > tbody > tr"):
-            all_positions.append({
-                "Company": "Ubisoft",
-                "Title": job.find_element_by_css_selector("td:nth-child(1) > a").text,
-                "Link": job.find_element_by_css_selector("td:nth-child(1) > a").get_attribute("href"),
-                "Location": job.find_element_by_css_selector("td:nth-child(3) > a").text
-            })
+            has_more_pages = True
+            while has_more_pages:
+                for job in browser.find_elements_by_css_selector("table > tbody > tr"):
+                    all_positions.append({
+                        "Company": "Ubisoft",
+                        "Title": job.find_element_by_css_selector("td:nth-child(1) > a").text,
+                        "Link": job.find_element_by_css_selector("td:nth-child(1) > a").get_attribute("href"),
+                        "Location": job.find_element_by_css_selector("td:nth-child(3) > a").text
+                    })
 
-        for nav_button in browser.find_elements_by_css_selector("#sr-widget-job-grid > div.k-pager-wrap > a"):
-            if nav_button.get_attribute("title") == "Go to the next page":
-                if "disabled" in nav_button.get_attribute("class"):
-                    has_more_pages = False
-                else:
-                    nav_button.click()
+                for nav_button in browser.find_elements_by_css_selector("#sr-widget-job-grid > div.k-pager-wrap > a"):
+                    if nav_button.get_attribute("title") == "Go to the next page":
+                        if "disabled" in nav_button.get_attribute("class"):
+                            has_more_pages = False
+                        else:
+                            nav_button.click()
+        except:
+            print("ERROR: Ubisoft could not be scraped!")
 
-    print("Done")
+    except:
+        print("ERROR: Ubisoft could not be scraped!")
+
+    if len(all_positions) > 0:
+        print("Done")
+
+    browser.quit()
     return all_positions
 
 
@@ -539,65 +560,66 @@ def scrape_zendesk_positions(link):
 
     try:
         WebDriverWait(browser, 20).until(EC.visibility_of_element_located((By.CSS_SELECTOR, ".phs-facet-results-block > .phs-jobs-list")))
-    except TimeoutException:
-        print("Failure to open Zendesk website")
-        browser.quit()
 
-    # Select Job Category: Engineering & Product
-    browser.find_element_by_css_selector(".phs-filter-panels .panel:nth-child(1)").click()
-    browser.find_elements_by_css_selector(".phs-filter-panels .panel:nth-child(1) .phs-facet-results > ul > li")[0].click()
+        # Select Job Category: Engineering & Product
+        browser.find_element_by_css_selector(".phs-filter-panels .panel:nth-child(1)").click()
+        browser.find_elements_by_css_selector(".phs-filter-panels .panel:nth-child(1) .phs-facet-results > ul > li")[0].click()
 
-    try:
-        WebDriverWait(browser, 20).until(EC.visibility_of_element_located((By.CSS_SELECTOR, ".phs-facet-results-block > .phs-jobs-list")))
-    except TimeoutException:
-        print("Failure to open Zendesk website (after selecting Job Category)")
-        browser.quit()
+        try:
+            WebDriverWait(browser, 20).until(EC.visibility_of_element_located((By.CSS_SELECTOR, ".phs-facet-results-block > .phs-jobs-list")))
 
-    time.sleep(1)
+            time.sleep(1)
 
-    # Select Country: United States Of America
-    browser.find_element_by_css_selector(".phs-filter-panels .panel:nth-child(2)").click()
-    browser.find_elements_by_css_selector(".phs-filter-panels .panel:nth-child(2) .phs-facet-results > ul > li")[0].click()
+            # Select Country: United States Of America
+            browser.find_element_by_css_selector(".phs-filter-panels .panel:nth-child(2)").click()
+            browser.find_elements_by_css_selector(".phs-filter-panels .panel:nth-child(2) .phs-facet-results > ul > li")[0].click()
 
-    try:
-        WebDriverWait(browser, 20).until(EC.visibility_of_element_located((By.CSS_SELECTOR, ".phs-facet-results-block > .phs-jobs-list")))
-    except TimeoutException:
-        print("Failure to open Zendesk website (after selecting Country)")
-        browser.quit()
-
-    time.sleep(1)
-
-    page_count = int(browser.find_element_by_css_selector(".phs-jobs-list-header .phs-header-controls .result-count").text)
-    page_count = ((page_count // 10) + 1) if (page_count % 10 > 0) else (page_count // 10)
-
-    for page in range(1, page_count + 1):
-        for job in browser.find_elements_by_css_selector("ul > li.jobs-list-item"):
             try:
-                job.find_element_by_css_selector(".job-multi-locations > li > button").click()
-                all_positions.append({
-                    "Company": "Zendesk",
-                    "Title": job.find_element_by_css_selector(".job-title > span").text,
-                    "Link": job.find_element_by_css_selector(".information > span > a").get_attribute("href"),
-                    "Location": "; ".join([location.text for location in job.find_elements_by_css_selector(".job-multi-locations > li > ul > li.location")])
-                })
+                WebDriverWait(browser, 20).until(EC.visibility_of_element_located((By.CSS_SELECTOR, ".phs-facet-results-block > .phs-jobs-list")))
+
+                time.sleep(1)
+
+                page_count = int(browser.find_element_by_css_selector(".phs-jobs-list-header .phs-header-controls .result-count").text)
+                page_count = ((page_count // 10) + 1) if (page_count % 10 > 0) else (page_count // 10)
+
+                for page in range(1, page_count + 1):
+                    for job in browser.find_elements_by_css_selector("ul > li.jobs-list-item"):
+                        # if multiple locations, open dropdown to get all locations. otherwise, scrape the single location
+                        try:
+                            job.find_element_by_css_selector(".job-multi-locations > li > button").click()
+                            all_positions.append({
+                                "Company": "Zendesk",
+                                "Title": job.find_element_by_css_selector(".job-title > span").text,
+                                "Link": job.find_element_by_css_selector(".information > span > a").get_attribute("href"),
+                                "Location": "; ".join([location.text for location in job.find_elements_by_css_selector(".job-multi-locations > li > ul > li.location")])
+                            })
+                        except:
+                            all_positions.append({
+                                "Company": "Zendesk",
+                                "Title": job.find_element_by_css_selector(".job-title > span").text,
+                                "Link": job.find_element_by_css_selector(".information > span > a").get_attribute("href"),
+                                "Location": job.find_element_by_css_selector(".job-info .job-location").text[9:]
+                            })
+
+                    # move to next page
+                    if (page + 1) <= page_count:
+                        for i in browser.find_elements_by_css_selector("ul.pagination > li"):
+                            if i.find_element_by_css_selector("a").text == str(page + 1):
+                                i.find_element_by_css_selector("a").click()
+                                break
+
+                    time.sleep(1)
             except:
-                all_positions.append({
-                    "Company": "Zendesk",
-                    "Title": job.find_element_by_css_selector(".job-title > span").text,
-                    "Link": job.find_element_by_css_selector(".information > span > a").get_attribute("href"),
-                    "Location": job.find_element_by_css_selector(".job-info .job-location").text[9:]
-                })
+                print("ERROR: Zendesk could not be scraped! (after selecting Country)")
+        except:
+            print("ERROR: Zendesk could not be scraped! (after selecting Job Category)")
+    except:
+        print("ERROR: Zendesk could not be scraped!")
 
-        # move to next page
-        if (page + 1) <= page_count:
-            for i in browser.find_elements_by_css_selector("ul.pagination > li"):
-                if i.find_element_by_css_selector("a").text == str(page + 1):
-                    i.find_element_by_css_selector("a").click()
-                    break
+    if len(all_positions) > 0:
+        print("Done")
 
-        time.sleep(1)
-
-    print("Done")
+    browser.quit()
     return all_positions
 
 

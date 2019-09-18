@@ -201,8 +201,8 @@
   },
   {
     "Company Name": "Zynga",
-    "Careers Website": "https://jobs.jobvite.com/zynga/job/",
-    "Job Item": ".jv-wrapper > .jv-job-list:nth-child(8) > tbody > tr, .jv-wrapper > .jv-job-list:nth-child(12) > tbody > tr",
+    "Careers Website": "https://jobs.jobvite.com/zynga/search?c=Engineering&p=0",
+    "Job Item": "table.jv-job-list > tbody > tr",
     "Job Item Title": "td.jv-job-list-name > a",
     "Job Item Link": "td.jv-job-list-name > a",
     "Job Item Location": "td.jv-job-list-location"
