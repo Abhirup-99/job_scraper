@@ -1,0 +1,210 @@
+[
+  {
+    "Company Name": "Airbnb",
+    "Careers Website": "https://careers.airbnb.com/",
+    "Job Item": ".jobs-board__positions__list__item",
+    "Job Item Title": ".jobs-board__positions__list__item__title",
+    "Job Item Link": ".jobs-board__positions__list__item__link",
+    "Job Item Location": ".jobs-board__positions__list__item__location",
+    "Prereq Clicks": "//*[@id='preact-widget-airbnb-jobs']/div/div[2]/div[1]/div/ul/li[7]/button"
+  },
+  {
+    "Company Name": "Airbnb",
+    "Careers Website": "https://careers.airbnb.com/",
+    "Job Item": ".jobs-board__positions__list__item",
+    "Job Item Title": ".jobs-board__positions__list__item__title",
+    "Job Item Link": ".jobs-board__positions__list__item__link",
+    "Job Item Location": ".jobs-board__positions__list__item__location",
+    "Prereq Clicks": "//*[@id='preact-widget-airbnb-jobs']/div/div[2]/div[1]/div/ul/li[19]/button"
+  },
+  {
+    "Company Name": "Compass",
+    "Careers Website": "https://www.compass.com/careers/jobs",
+    "Job Item": ".careers-allJobs-group:nth-child(1) > div.careers-grid.careers-gridThird > .careers-grid-item.careers-allJobs-job",
+    "Job Item Title": ".careers-grid-itemTitle",
+    "Job Item Location": ".careers-grid-itemSubtitle"
+  },
+  {
+    "Company Name": "DoorDash",
+    "Careers Website": "https://www.doordash.com/careers/",
+    "Job Item": "#openings > div > div.sc-jtggT.lnrvrr > div:nth-child(11) > div > ul > a",
+    "Job Item Title": ".sc-gldTML.huiDdt.sc-bmyXtO.iTxUbx",
+    "Job Item Location": ".sc-ccSCjj.bBBFVz.sc-bmyXtO.bRsSdE"
+  },
+  {
+    "Company Name": "Grammarly",
+    "Careers Website": "https://www.grammarly.com/jobs",
+    "Job Item": "#page > div > div > div > div.szc3i-_-_-_-_-_-client-pages-jobs-home--jobs-content > div._3cnxg-_-_-_-_-_-client-components-jobs-vacancies_block--vacancies_block-vacanciesBlock > div:nth-child(2) > div._2jcT5-_-_-_-_-_-client-components-jobs-vacancies_block--vacancies_block-vacancies > div:nth-child(2) > div:nth-child(1) > a",
+    "Job Item Title": "div._26gDu-_-_-_-_-_-client-components-jobs-vacancies_block--vacancies_block-details > div._15fPM-_-_-_-_-_-client-components-jobs-vacancies_block--vacancies_block-title",
+    "Job Item Location": "div._26gDu-_-_-_-_-_-client-components-jobs-vacancies_block--vacancies_block-details > div._3OxF4-_-_-_-_-_-client-components-jobs-vacancies_block--vacancies_block-location"
+  },
+  {
+    "Company Name": "Hinge",
+    "Careers Website": "https://hinge.co/careers/engineering",
+    "Job Item": ".job-list__item",
+    "Job Item Title": ".job-list__link > span",
+    "Job Item Link": ".job-list__link"
+  },
+  {
+    "Company Name": "Honey",
+    "Careers Website": "https://www.joinhoney.com/careers/Engineering",
+    "Job Item": "#jobSection > div > div > div.c01135 > div.c01185.c01182",
+    "Job Item Title": "div > .title3",
+    "Job Item Link": "div > a",
+    "Job Item Location": "div > .title1"
+  },
+  {
+    "Company Name": "Lemonade",
+    "Careers Website": "https://makers.lemonade.com/",
+    "Job Item": ".Recipes__RecipiesList-sc-1i58rlh-2 > .Recipe__RecipeContainer-sc-1a537ki-4",
+    "Job Item Title": ".Recipe__Title-sc-1a537ki-6",
+    "Job Item Link": ".Recipe__RecipeLink-sc-1a537ki-5",
+    "Job Item Location": ".Recipe__Location-sc-1a537ki-7"
+  },
+  {
+    "Company Name": "Lyft",
+    "Careers Website": "https://www.lyft.com/careers/university",
+    "Job Item": "#react-app > div > article > div > div._2MfXzO > section:nth-child(4) > div > div:nth-child(2) > div > div.fzEL0d._2YjQ0N > a",
+    "Job Item Title": "div:nth-child(1)",
+    "Job Item Location": "div:nth-child(2)"
+  },
+  {
+    "Company Name": "Mapbox",
+    "Careers Website": "https://www.mapbox.com/careers/",
+    "Job Item": "#react-target > div > div.grid.grid--gut30 > div.col.col--12.col--8-mm.col--9-ml > div.border--gray-light",
+    "Job Item Title": "a > div.flex-child-mm.flex-child--grow-mm > p.txt-bold",
+    "Job Item Link": "a",
+    "Job Item Location": "a > div.flex-child-mm.flex-child--grow-mm > p.career-list__location.color-gray"
+  },
+  {
+    "Company Name": "Mixmax",
+    "Careers Website": "https://careers.mixmax.com/",
+    "Job Item": "body > div.root-container.careers > main > section:nth-child(2) > div > div:nth-child(2) > hgroup",
+    "Job Item Title": "h5 > a",
+    "Job Item Link": "h5 > a",
+    "Job Item Location": "p"
+  },
+  {
+    "Company Name": "NerdWallet",
+    "Careers Website": "https://www.nerdwallet.com/careers/engineering",
+    "Job Item": "#react-root > div > div > div:nth-child(1) > div.joblist__cont.KH8lp._2m6fE._3tSNy > div > div:nth-child(2) > div.joblist__tile--cont",
+    "Job Item Title": "a > div > p",
+    "Job Item Link": "a",
+    "Job Item Location": "a > div > div > p"
+  },
+  {
+    "Company Name": "Oscar",
+    "Careers Website": "https://www.hioscar.com/careers/department/technology",
+    "Job Item": "body > div:nth-child(2) > div > div > div.h-3EZs15nbvccnNsL6WqiQJl > div > div > div > div > div > div > div:nth-child(3) > section:nth-child(1) > div > div:nth-child(1) > div:nth-child(2) > a",
+    "Job Item Title": "div.h-3Qkd_VSTg_kVwFCki3GVur",
+    "Job Item Location": "div.h-2xLClD83eTR_ZCnD-dKjI7 > div.h-1p1EucPU-wXxKmW18YviHE > ul > li:nth-child(3)"
+  },
+  {
+    "Company Name": "Shopify",
+    "Careers Website": "https://www.shopify.com/careers/search?specialties%5B%5D=1&keywords=&sort=",
+    "Job Item": "table > tbody > tr.jobs-table__row",
+    "Job Item Title": "td.jobs-table__cell:nth-child(1) > a",
+    "Job Item Link": "td.jobs-table__cell:nth-child(1) > a",
+    "Job Item Location": "td.jobs-table__cell:nth-child(3)"
+  },
+  {
+    "Company Name": "Sketch",
+    "Careers Website": "https://sketch.breezy.hr/",
+    "Job Item": "div.positions > div > div > ul.positions > li.position",
+    "Job Item Title": "a > h2",
+    "Job Item Link": "a",
+    "Job Item Location": "a > ul > li.location > span"
+  },
+  {
+    "Company Name": "Slack",
+    "Careers Website": "https://slack.com/careers",
+    "Job Item": "table.jobs-listing-table:nth-child(6) > tbody > tr",
+    "Job Item Title": "td.for-desktop-only--table-cell:nth-child(2)",
+    "Job Item Link": "td.for-desktop-only--table-cell:nth-child(5) > a",
+    "Job Item Location": "td.for-desktop-only--table-cell:nth-child(4)"
+  },
+  {
+    "Company Name": "Square",
+    "Careers Website": "https://squareup.com/careers/jobs?role=Engineering",
+    "Job Item": "#main-content > section:nth-child(5) > div > div:nth-child(9) > #table-job-postings > tbody > tr",
+    "Job Item Title": "th:nth-child(1) > a",
+    "Job Item Link": "th:nth-child(1) > a",
+    "Job Item Location": "td:nth-child(4) > ul > li"
+  },
+  {
+    "Company Name": "Stripe",
+    "Careers Website": "https://stripe.com/jobs/search?t=engineering%2Cproduct-and-technical.tech&l=chicago%2Cnewyork%2Csanfrancisco%2Cseattle&s=fulltime",
+    "Job Item": "#jobs-tool-listings > div > div.sc-gzVnrw.cFbSox > ul > li",
+    "Job Item Title": "div > a",
+    "Job Item Link": "div > a",
+    "Job Item Location": "div > div > span"
+  },
+  {
+    "Company Name": "Tinder",
+    "Careers Website": "https://www.gotinder.com/jobs/departments/software-engineering",
+    "Job Item": "#greenhouse-jobs-list > ul > li.greenhouse-job",
+    "Job Item Title": "a > h4",
+    "Job Item Link": "a",
+    "Job Item Location": "a > h5"
+  },
+  {
+    "Company Name": "Topfunnel",
+    "Careers Website": "https://www.topfunnel.co/about-us/",
+    "Job Item": "body > div.container.mt-4.py-5 > div.row:nth-child(2) > div.col-12",
+    "Job Item Title": "h2 > a",
+    "Job Item Link": "h2 > a",
+    "Job Item Location": "h3"
+  },
+  {
+    "Company Name": "Valve",
+    "Careers Website": "https://www.valvesoftware.com/en/?job_cat=software-engineering",
+    "Job Item": "#jobs > div > div.row > div > ul > li.job_tag.selected > div > div > div > div.job_openings > div.row > div.job_opening",
+    "Job Item Title": "a > h5",
+    "Job Item Link": "a"
+  },
+  {
+    "Company Name": "Valve",
+    "Careers Website": "https://www.valvesoftware.com/en/?job_cat=game-design",
+    "Job Item": "#jobs > div > div.row > div > ul > li.job_tag.selected > div > div > div > div.job_openings > div.row > div.job_opening",
+    "Job Item Title": "a > h5",
+    "Job Item Link": "a"
+  },
+  {
+    "Company Name": "VSCO",
+    "Careers Website": "https://vsco.co/about/careers/",
+    "Job Item": "#current-openings > .department-container:nth-child(4) > .job-container",
+    "Job Item Title": "div > h3.job-title",
+    "Job Item Location": "div > h3.job-location"
+  },
+  {
+    "Company Name": "X",
+    "Careers Website": "https://x.company/careers-at-x",
+    "Job Item": "#first-section > div.careers-list.js-career-filters > div.job-listings > div.listing-group:nth-child(1) > div.col-m-6 > ul > li",
+    "Job Item Title": "a.job-link > h4",
+    "Job Item Link": "a.job-link",
+    "Job Item Location": "a.job-link > p.job-location"
+  },
+  {
+    "Company Name": "Zenimax",
+    "Careers Website": "https://jobs.zenimax.com/jobs/?department=7&located=&location=",
+    "Job Item": ".job-listings > a.job-link",
+    "Job Item Title": ".job-row > .job-title",
+    "Job Item Location": ".job-row > .job-department:nth-child(3)"
+  },
+  {
+    "Company Name": "Zocdoc",
+    "Careers Website": "https://www.zocdoc.com/about/careers-list/",
+    "Job Item": "#jobs > section.technology > div > .job-openings-container > ul > li.row",
+    "Job Item Title": "div:nth-child(1) > a",
+    "Job Item Link": "div:nth-child(1) > a",
+    "Job Item Location": "div.loc:nth-child(3) > span"
+  },
+  {
+    "Company Name": "Zynga",
+    "Careers Website": "https://jobs.jobvite.com/zynga/job/",
+    "Job Item": ".jv-wrapper > .jv-job-list:nth-child(8) > tbody > tr, .jv-wrapper > .jv-job-list:nth-child(12) > tbody > tr",
+    "Job Item Title": "td.jv-job-list-name > a",
+    "Job Item Link": "td.jv-job-list-name > a",
+    "Job Item Location": "td.jv-job-list-location"
+  }
+]

@@ -100,3 +100,68 @@ Remote - Hong Kong
 Dublin
 Remote - Europe
 Moscow, Russia
+Bengaluru, Karnataka, India
+Ukraine, Zaporizhzhia
+Ottawa, Montreal, Toronto, Waterloo, Remote UTC -3 to UTC -7 time
+Montreal, Canada
+Uppsala, SE
+Frankfurt, DE
+Beijing, China
+London, London
+Kitchener, Canada
+Vilnius, Lithuania
+Montreal
+Bengaluru, India
+Ottawa, Elgin - HQ
+Sarona Campus, TLV
+Remote Worldwide
+Brighton, East Sussex
+Pune, India
+Waterloo, Canada
+Ottawa, Toronto, Waterloo
+Helsinki
+Toronto, Canada
+Shenzhen, China
+Kyiv, Ukraine
+Waterloo, Montreal
+Lyon, FR
+Minsk
+Montreal, CA
+Rome, Italy
+Montréal, Quebec, Canada
+Dubai, UAE
+Toronto, ON, Canada
+Montreal, QC
+London, GB
+Bucharest
+Seoul
+Lehi
+Remote California
+Remote Canada
+Remote Georgia
+Maidenhead
+Basel
+Edinburgh
+Bangalore
+Remote Maine
+Hamburg
+Ottawa, Waterloo
+Noida
+Brussels
+Yokohama, Japan
+Remote - US West Coast
+Munich, DE
+Saône-et-Loire, Bourgogne-Franche-Comté, France
+Sydney, AU
+Beijing, P.R. China
+Santiago Metropolitan Area
+Dublin, IE
+Bangalore, IN
+Amsterdam, NL
+Zurich, Switzerland
+Tokyo, JP
+INDIA
+LINCOLN
+LEEDS
+NORTH
+Santa Fe, Capital District, Colombia
