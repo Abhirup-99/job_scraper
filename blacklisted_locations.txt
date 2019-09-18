@@ -165,3 +165,15 @@ LINCOLN
 LEEDS
 NORTH
 Santa Fe, Capital District, Colombia
+Paris, FR
+Montreal, Quebec, Canada
+Caesarea, Haifa District, Israel
+Madrid, Community of Madrid, Spain
+Bucharest, Bucharest, Romania
+Galway, County Galway, Ireland
+Seoul, Seoul, South Korea
+Vancouver, British Columbia, Canada + 1 more
+Vancouver, British Columbia, Canada
+Stockholm, Stockholm County, Sweden
+Edmonton, Alberta, Canada
+Shanghai, Shanghai, China
