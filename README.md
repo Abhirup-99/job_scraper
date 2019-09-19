@@ -26,7 +26,7 @@ and outputs a file: `scraped_positions.csv`
 **Note**: There may be a console output that includes a list of locations, those are new locations that were found in scraped job positions that aren't in the `blacklisted_locations` and `whitelisted_locations`. Those job positions containing those new locations will still be in the output CSV file, but they'll need to be added to the blacklist/whitelist before running the script again.
 
 ### Recommended Usage Steps
-1. Leave the following files as is `already_seen_links.txt`, `blacklisted_locations.txt`, `whitelisted_locations.txt`
+1. Leave the following files as is `already_seen_links.txt`, `blacklisted_locations.txt`, `whitelisted_locations.txt` (it's set to locations that are non-remote and inside the US)
 2. Leave all `.json` files as is
 3. Add to `blacklisted_keywords.txt` and `blacklisted_position_titles.txt` with keywords and position titles that you don't want to appear in the filtered job positions
 4. (Optional, not suggested for full-time) Add to `required_keywords.txt` with keywords that must be in each filtered job position title
