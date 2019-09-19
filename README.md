@@ -155,10 +155,11 @@ and outputs a file: `scraped_positions.csv`
       }
       ```
 
-## Current Issues
+## Roadmap / Current Issues
 - [ ] Scraping Apple jobs board won't work in headless mode (using Selenium)
 - [ ] Allow more than one prerequisite click for Selenium job scraping
 - [ ] Expand this script to accommodate for more than just engineering/CS-related positions
+- [ ] Separate scraping and filtering, so filtering can be done on an existing without scraping first
 
 ## Company List
 Company Name | Scraping Method | Status
