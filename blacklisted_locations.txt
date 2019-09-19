@@ -177,3 +177,4 @@ Vancouver, British Columbia, Canada
 Stockholm, Stockholm County, Sweden
 Edmonton, Alberta, Canada
 Shanghai, Shanghai, China
+Remote - Seattle, WA
