@@ -1,5 +1,5 @@
 # Job Scraper
-A console program to scrape job opportunities from company job boards. Works for both full-time and internships!
+A script to scrape job opportunities from company job boards. Works for both full-time and internships!
 
 ## Installation
 Install Selenium: `pip install selenium`
@@ -22,6 +22,18 @@ Requires the following files in the same directory:
 * `workday_companies.json`
 
 and outputs a file: `scraped_positions.csv`
+
+**Note**: There may be a console output that includes a list of locations, those are new locations that were found in scraped job positions that aren't in the `blacklisted_locations` and `whitelisted_locations`. Those job positions containing those new locations will still be in the output CSV file, but they'll need to be added to the blacklist/whitelist before running the script again.
+
+### Recommended Usage Steps
+1. Leave the following files as is `already_seen_links.txt`, `blacklisted_locations.txt`, `whitelisted_locations.txt`
+2. Leave all `.json` files as is
+3. Add to `blacklisted_keywords.txt` and `blacklisted_position_titles.txt` with keywords and position titles that you don't want to appear in the filtered job positions
+4. (Optional, not suggested for full-time) Add to `required_keywords.txt` with keywords that must be in each filtered job position title
+5. Run `job_scraper.py`
+6. If `Add each location to the whitelist or blacklist:` appears in the console, add each location to `blacklisted_locations.txt` or `whitelisted_locations.txt`
+7. Open `scraped_positions.csv`, add each URL to `already_seen_links.txt` so they don't appear again when you run `job_scraper.py` again
+8. It's recommended to run the script around once per week
 
 ## File Structure
 * `already_seen_links.txt`
