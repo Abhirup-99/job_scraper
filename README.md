@@ -192,7 +192,7 @@ LinkedIn | Selenium (custom) | Complete
 Lyft | Selenium | Complete
 MailChimp | Greenhouse | Complete
 Mapbox | Selenium | Complete
-Mixmax | Selenium | Complete
+Mixmax | Selenium | Broken (as of 9/19)
 NerdWallet | Selenium | Complete
 Nextdoor | Greenhouse | Complete
 Niantic | Greenhouse | Complete
@@ -213,7 +213,7 @@ Sonder | Greenhouse | Complete
 Splash | Greenhouse | Complete
 Spotify | Selenium (custom) | Complete
 Spoke | Lever | Complete
-Square | Selenium | Complete
+Square | Selenium | Broken (as of 9/19)
 Stripe | Selenium | Complete
 Textio | Lever | Complete
 Tinder | Selenium | Complete

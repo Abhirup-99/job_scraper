@@ -177,3 +177,59 @@ Vancouver, British Columbia, Canada
 Stockholm, Stockholm County, Sweden
 Edmonton, Alberta, Canada
 Shanghai, Shanghai, China
+Melbourne, Australia
+Remote South Korea
+Remote Massachusetts
+Guildford, England, United Kingdom
+Helsinki, Finland
+Mexico City
+Remote - US (Washington D.C.)
+Vancouver BC CAN
+Mumbai, IN
+São Paulo, BR
+Hong Kong, HK
+Brussels, Belgium
+Vancouver, BC, Canada
+Edinburgh, Scotland
+Remote - Seattle, WA
+Montreal - Office
+Toronto, ON
+Remote - Global
+Lisbon, Portugal
+Netherlands
+London, UK (Nordics Team)
+Remote Australia
+Remote-US
+Toronto, Vancouver, or Montreal
+Barcelona, Spain
+Beijing
+Mexico City, Mexico
+Johannesburg
+Singapore, SG
+Graz, AT
+Stockholm, SE
+Melbourne, Victoria, Australia
+Helsinki FIN
+California (remote)
+London, UK (France Team)
+Madrid Office
+Italy
+United Kingdom, Ireland
+Gurgaon, IN
+Amsterdam Area, Netherlands
+Edinburgh, Scotland, UK
+Remote - Los Angeles
+Guildford, United Kingdom
+Remote New York
+Toronto, CA
+Open - London, Rome, Madrid, Barcelona, Berlin
+Vancouver, Canada
+Remote New Zealand
+Milan, Italy
+Gurgaon, India
+Bengaluru Area, India
+Portugal, Spain
+County Dublin, Ireland
+Hyderabad, Telangana, India
+Kuala Lumpur, MY
+Remote Texas
