@@ -731,10 +731,10 @@ def scrape(all_companies, blacklisted_position_titles, required_keywords, blackl
     filtered_positions += scrape_ubisoft_positions("https://www.ubisoft.com/en-US/careers/search.aspx")
     filtered_positions += scrape_zendesk_positions("https://jobs.zendesk.com/us/en/search-results")
 
-    print("Filtering all positions by position title")
-    filtered_positions = filter_by_position_title(filtered_positions, blacklisted_position_titles)
     print("Filtering all positions by position title keywords")
     filtered_positions = filter_by_position_title_keywords(filtered_positions, required_keywords, blacklisted_keywords)
+    print("Filtering all positions by position title")
+    filtered_positions = filter_by_position_title(filtered_positions, blacklisted_position_titles)
     print("Filtering all positions by location")
     filtered_positions = filter_by_location(filtered_positions, whitelisted_locations, blacklisted_locations)
     print("Filtering all positions by unseen links")
@@ -751,18 +751,6 @@ def scrape(all_companies, blacklisted_position_titles, required_keywords, blackl
 
 
 def main():
-    """
-    greenhouse_companies and lever_companies follows the following format:
-        {"Company": <Company Name>, "Link": <Optional, End of Link if Differs From Company Name>}
-
-    Example #1: Company name matches link
-        Company Name = Google, Greenhouse Link = https://boards.greenhouse.io/google
-        {"Company": "Google"}
-    Example #2: Company name doesn't match link
-        Company Name = Google, Greenhouse Link = https://boards.greenhouse.io/googlejobs
-        {"Company": "Google", "Link": "googlejobs"}
-    """
-
     all_companies = {
         "greenhouse": json.load(open('greenhouse_companies.json')),
         "lever": json.load(open('lever_companies.json')),
@@ -773,7 +761,7 @@ def main():
         scrape(
             all_companies,
             [line.rstrip('\n') for line in open('blacklisted_position_titles.txt')],
-            [],
+            [line.rstrip('\n') for line in open('required_keywords.txt')],
             [line.rstrip('\n') for line in open('blacklisted_keywords.txt')],
             [line.rstrip('\n') for line in open('whitelisted_locations.txt')],
             [line.rstrip('\n') for line in open('blacklisted_locations.txt')],
