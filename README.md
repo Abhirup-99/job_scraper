@@ -146,3 +146,76 @@ and outputs a file: `scraped_positions.csv`
 ## Current Issues
 - [ ] Scraping Apple jobs board won't work in headless mode (using Selenium)
 - [ ] Allow more than one prerequisite click for Selenium job scraping
+
+## Company List
+Company Name | Scraping Method | Status
+--- | --- | ---
+Apple | Selenium (custom) | Complete (doesn't work in headless mode)
+Adobe | Workday | Complete
+Affinity | Lever | Complete
+Airbnb | Selenium | Complete
+Asana | Greenhouse | Complete
+Bolt | Lever | Complete
+Coda | Selenium (custom) | Complete
+Compass | Selenium | Complete
+DoorDash | Selenium | Complete
+Electronic Arts | Selenium (custom) | Complete
+Envoy | Greenhouse | Complete
+Epic Games | Workday | Complete
+Even | Lever | Complete
+Figma | Lever | Complete
+GitHub | Greenhouse | Complete
+Grammarly | Selenium | Complete
+Hinge | Selenium | Complete
+Honey | Selenium | Complete
+Houzz | Lever | Complete
+Hulu | Selenium (custom) | Complete
+Instacart | Greenhouse | Complete
+Intercom | Greenhouse | Complete
+Invision | Greenhouse | Complete
+Lattice | Lever | Complete
+Lemonade | Selenium | Complete
+LinkedIn | Selenium (custom) | Complete
+Lyft | Selenium | Complete
+MailChimp | Greenhouse | Complete
+Mapbox | Selenium | Complete
+Mixmax | Selenium | Complete
+NerdWallet | Selenium | Complete
+Nextdoor | Greenhouse | Complete
+Niantic | Greenhouse | Complete
+Oscar Health | Selenium | Complete
+Opendoor | Lever | Complete
+OpenTable | Greenhouse | Complete
+Palantir | Lever | Complete
+Plaid | Lever | Complete
+Postmates | Greenhouse | Complete
+Robinhood | Selenium | Complete
+Rockstar Games | Selenium (custom) | Complete
+SeatGeek | Greenhouse | Complete
+Shopify | Selenium | Complete
+Sketch | Selenium | Complete
+Slack | Selenium | Complete
+Snap | Workday | Complete
+Sonder | Greenhouse | Complete
+Splash | Greenhouse | Complete
+Spotify | Selenium (custom) | Complete
+Spoke | Lever | Complete
+Square | Selenium | Complete
+Stripe | Selenium | Complete
+Textio | Lever | Complete
+Tinder | Selenium | Complete
+Thumbtack | Greenhouse | Complete
+Topfunnel | Selenium | Complete
+Ubisoft | Selenium (custom) | Complete
+Udacity | Greenhouse | Complete
+Udemy | Lever | Complete
+Valve | Selenium | Complete
+Vimeo | Greenhouse | Complete
+VSCO | Selenium | Complete
+Wealthfront | Lever | Complete
+X | Selenium | Complete
+Zendesk | Selenium (custom) | Complete
+Zenimax | Selenium | Complete
+Zillow Group | Workday | Complete
+Zocdoc | Selenium | Complete
+Zynga | Selenium | Complete
